@@ -1,0 +1,12 @@
+part of 'change_password_and_delete_account_cubit.dart';
+
+@immutable
+abstract class ChangePasswordAndDeleteAccountState {}
+
+class ChangePasswordAndDeleteAccountInitial extends ChangePasswordAndDeleteAccountState {}
+class ChangePasswordLoading extends ChangePasswordAndDeleteAccountState {}
+class ChangePasswordSuccess extends ChangePasswordAndDeleteAccountState {}
+class ChangePasswordError extends ChangePasswordAndDeleteAccountState {}
+class DeleteProfileLoading extends ChangePasswordAndDeleteAccountState {}
+class DeleteProfileSuccess extends ChangePasswordAndDeleteAccountState {}
+class DeleteProfileError extends ChangePasswordAndDeleteAccountState {}
