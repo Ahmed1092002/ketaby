@@ -95,7 +95,23 @@ TextEditingController passwordOfDeleteAccountController = TextEditingController(
   create: (context) => ChangePasswordAndDeleteAccountCubit(),
   child: BlocConsumer<ChangePasswordAndDeleteAccountCubit, ChangePasswordAndDeleteAccountState>(
     listener: (context, state) {
-      // TODO: implement listener
+if (state is ChangePasswordSuccess) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Password Changed Successfully'),
+      backgroundColor: Colors.green,
+    ),
+  );
+  if (state is ChangePasswordError) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+}
     },
     builder: (context, state) {
       var cubit = ChangePasswordAndDeleteAccountCubit.get(context);
@@ -140,14 +156,24 @@ TextEditingController passwordOfDeleteAccountController = TextEditingController(
                           child: Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.pop(context);
-                            cubit.changePassword(context: context,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Password Changed Successfully'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          await   cubit.changePassword(
                                 oldPassword: oldPasswordController.text,
                                 newPassword: newPasswordController.text,
                                 confirmPassword: confirmPasswordController.text);
 
+
+
+
                           },
+
                           child: Text('Change'),
                         ),
                       ],
@@ -157,69 +183,69 @@ TextEditingController passwordOfDeleteAccountController = TextEditingController(
 ));
               },
             ),
-            Divider(
-              color: Colors.grey,
-              height: 2,
-              thickness: 2,
-              endIndent: 20,
-              indent: 20,
-            ),
-            ListTile(
-              leading: Icon(Icons.delete_forever_outlined),
-              title: Text('Delete Account'),
-              onTap: () {
-                Navigator.pop(context);
-                showAdaptiveDialog(context: context,
-                    builder: (context) => BlocProvider(
-  create: (context) => ChangePasswordAndDeleteAccountCubit(),
-  child: BlocConsumer<ChangePasswordAndDeleteAccountCubit, ChangePasswordAndDeleteAccountState>(
-                        listener: (context, state) {
-                          // TODO: implement listener
-                        },
-                        builder: (context, state) {
-                          var cubit = ChangePasswordAndDeleteAccountCubit.get(context);
-                          return AlertDialog(
-                            titleTextStyle: TextStyle(color: mainColor,fontSize: 20),
-                            scrollable: true,
-                            surfaceTintColor: mainColor,
-                            backgroundColor: Colors.white,
-                            title: Text('Delete Account',style: TextStyle(color: mainColor),),
-                            content: Text('Are you sure you want to delete your account?'),
-                            actions: [
-                              Text('enter your password to confirm the deletion'),
-                              CustomTextField(
-                                hint: 'Password',
-                                icon: Icons.lock_outline,
-                                controller: passwordOfDeleteAccountController,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      cubit.deleteAccount(context: context,
-                                          currentPassword: passwordOfDeleteAccountController.text);
-                                      navigateToScreenAndExit(context, LoginScrean());
-                                    },
-                                    child: Text('Delete'),
-                                  ),
-                                ],
-                              )
-
-                            ],
-                          );
-                        },
-                    ),
-));
-              },
-            ),
+//             Divider(
+//               color: Colors.grey,
+//               height: 2,
+//               thickness: 2,
+//               endIndent: 20,
+//               indent: 20,
+//             ),
+//             ListTile(
+//               leading: Icon(Icons.delete_forever_outlined),
+//               title: Text('Delete Account'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//                 showAdaptiveDialog(context: context,
+//                     builder: (context) => BlocProvider(
+//   create: (context) => ChangePasswordAndDeleteAccountCubit(),
+//   child: BlocConsumer<ChangePasswordAndDeleteAccountCubit, ChangePasswordAndDeleteAccountState>(
+//                         listener: (context, state) {
+//                           // TODO: implement listener
+//                         },
+//                         builder: (context, state) {
+//                           var cubit = ChangePasswordAndDeleteAccountCubit.get(context);
+//                           return AlertDialog(
+//                             titleTextStyle: TextStyle(color: mainColor,fontSize: 20),
+//                             scrollable: true,
+//                             surfaceTintColor: mainColor,
+//                             backgroundColor: Colors.white,
+//                             title: Text('Delete Account',style: TextStyle(color: mainColor),),
+//                             content: Text('Are you sure you want to delete your account?'),
+//                             actions: [
+//                               Text('enter your password to confirm the deletion'),
+//                               CustomTextField(
+//                                 hint: 'Password',
+//                                 icon: Icons.lock_outline,
+//                                 controller: passwordOfDeleteAccountController,
+//                               ),
+//                               Row(
+//                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                                 children: [
+//                                   TextButton(
+//                                     onPressed: () {
+//                                       Navigator.pop(context);
+//                                     },
+//                                     child: Text('Cancel'),
+//                                   ),
+//                                   TextButton(
+//                                     onPressed: () {
+//                                       Navigator.pop(context);
+//                                       cubit.deleteAccount(
+//                                           currentPassword: passwordOfDeleteAccountController.text);
+//                                       navigateToScreenAndExit(context, LoginScrean());
+//                                     },
+//                                     child: Text('Delete'),
+//                                   ),
+//                                 ],
+//                               )
+//
+//                             ],
+//                           );
+//                         },
+//                     ),
+// ));
+//               },
+//             ),
 
 
           ],

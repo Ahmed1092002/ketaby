@@ -10,6 +10,8 @@ class BooksContainer extends StatelessWidget {
   String? discount;
   int ? stock;
    Function()? onPressed;
+   Function()? onWishList;
+  IconData? icon = Icons.favorite_border;
 
    BooksContainer({
     super.key,
@@ -21,6 +23,8 @@ class BooksContainer extends StatelessWidget {
     this.discount,
     this.stock,
     this.onPressed,
+    this.onWishList,
+    this.icon,
   });
 
   @override
@@ -128,8 +132,9 @@ class BooksContainer extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.favorite_border),
+                  onPressed: onWishList ,
+
+                  icon: Icon(icon,),
                 ),
                 Text(
                   "items in Stock\n ${stock.toString()}",

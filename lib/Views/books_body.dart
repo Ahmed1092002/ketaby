@@ -12,21 +12,17 @@ class BooksBody extends StatefulWidget {
 }
 
 class _BooksBodyState extends State<BooksBody> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    ProductCubit.get(context).getProductData();
-    super.initState();
-  }
+
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductCubit, ProductState>(
       listener: (context, state) {
-       if (state is ProductSuccessState) {
+        if (state is ProductSuccessState) {
           print('success');
         }
         if (state is ProductErrorState) {
-         ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),
             ),
@@ -36,7 +32,7 @@ class _BooksBodyState extends State<BooksBody> {
 
       builder: (context, state) {
         var cubit = ProductCubit.get(context);
-    if (cubit.productModel == null || state is ProductLoadingState) {
+        if (cubit.productModel == null || cubit.wishListModel == null) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -51,7 +47,13 @@ class _BooksBodyState extends State<BooksBody> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
+                  onChanged: (value) {
+                    ProductCubit.get(context).searchProducts(value);
+                  },
                   style: TextStyle(color: Colors.grey, fontSize: 20),
+                  onTap: () {
+                    FocusNode().requestFocus(FocusNode());
+                  },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -74,41 +76,49 @@ class _BooksBodyState extends State<BooksBody> {
                 height: MediaQuery
                     .of(context)
                     .size
-                    .height ,
+                    .height,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 10,
-                  itemExtent: 200,
-                  addAutomaticKeepAlives: true,
-                  addRepaintBoundaries: true,
-                  addSemanticIndexes: true,
-
-                  itemBuilder: (context, index) =>
-                      BooksContainer(
-
-                    image: cubit.productModel!.data!.products![index].image,
-                    name: cubit.productModel!.data!.products![index].name,
-                    price: cubit
-                        .productModel!.data!.products![index].price
-                        .toString(),
-                    discount: cubit
-                        .productModel!.data!.products![index].discount
-                        .toString(),
-                    category: cubit
-                        .productModel!.data!.products![index].category,
-                    priceNow: cubit
-                        .productModel!.data!.products![index].priceAfterDiscount
-                        .toString(),
-                    stock: cubit.productModel!.data!.products![index].stock,
-                    onPressed: () async {
-                    await  CartCubit.get(context).addToCartData(
-                        id: cubit.productModel!.data!.products![index].id!.toInt(),
-                      );
-                    },
+                  itemCount: cubit.productModel!.data!.products!.length,
 
 
-
-                  ),
+                  itemBuilder: (context, index) {
+                    return BooksContainer(
+                      image: cubit.productModel!.data!.products![index].image,
+                      name: cubit.productModel!.data!.products![index].name,
+                      price: cubit.productModel!.data!.products![index].price
+                          .toString(),
+                      discount: cubit
+                          .productModel!.data!.products![index].discount
+                          .toString(),
+                      category:
+                      cubit.productModel!.data!.products![index].category,
+                      priceNow: cubit.productModel!.data!.products![index]
+                          .priceAfterDiscount
+                          .toString(),
+                      stock: cubit.productModel!.data!.products![index].stock,
+                      onPressed: () async {
+                        await CartCubit.get(context).addToCartData(
+                          id: cubit.productModel!.data!.products![index].id!
+                              .toInt(),
+                        );
+                      },
+                      onWishList: () async {
+                        await cubit.addToWishListData(
+                          id: cubit.productModel!.data!.products![index].id!
+                              .toInt(),
+                        );
+                        await cubit.getProductData();
+                      },
+                      icon: cubit.wishListModel!.data!.data!.length == 0
+                          ? Icons.favorite_border
+                          :
+                      cubit.wishList.contains(cubit.productModel!.data!
+                          .products![index].id)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                    );
+                  },
                 ),
               ),
             ],
@@ -117,4 +127,5 @@ class _BooksBodyState extends State<BooksBody> {
       },
     );
   }
+
 }

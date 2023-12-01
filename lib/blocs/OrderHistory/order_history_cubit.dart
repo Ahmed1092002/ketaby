@@ -21,15 +21,16 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
     DioHelper.getData(url: 'order-history', token: token)
         .then((value) =>
     {
-     if (value.data['message'].toString().isNotEmpty)
-       {
-         print (value.data['message'].toString()),
-          noOrderHistoryModel = NoOrderHistoryModel.fromJson(value.data),
-       } else {
-
-       orderHistoryModel = OrderHistoryModel.fromJson(value.data),
-       emit(GetOrderDataSuccess(orderHistoryModel!))
-     }
+     // if (value.data['message'].toString()==('No Orders To Show'))
+     //   {
+     //     print (value.data['message'].toString()),
+     //      noOrderHistoryModel = NoOrderHistoryModel.fromJson(value.data),
+     //   } else {
+     //
+     //
+     // }
+      orderHistoryModel = OrderHistoryModel.fromJson(value.data),
+      emit(GetOrderDataSuccess(orderHistoryModel!))
 
     }).catchError((error) {
       print(error.toString());

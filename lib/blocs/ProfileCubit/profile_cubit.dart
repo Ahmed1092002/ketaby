@@ -104,8 +104,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(UpdateProfileError());
     });
   }
-  Future<void> logout(BuildContext context) async {
-    emit(LogoutLoadingState());
+  Future<void> logout() async {
+    if (state is! LogoutLoadingState) {
+      emit(LogoutLoadingState());
+    }
 
     try {
       var response = await DioHelper.postData(url: 'logout', token: token);
@@ -115,19 +117,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       CashHelper.removeData(key: 'image');
       CashHelper.removeData(key: 'email');
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response.data['message'].toString()),
-          backgroundColor: Colors.green,
-        ),
-      );
+print (response.data);
 
-      emit(LogoutSuccessState());
+      if (state is! LogoutLoadingState) {
+        emit(LogoutSuccessState());
+      }
     } catch (error) {
       print(error.toString());
       emit(LogoutErrorState());
     }
   }
+
 
 
 

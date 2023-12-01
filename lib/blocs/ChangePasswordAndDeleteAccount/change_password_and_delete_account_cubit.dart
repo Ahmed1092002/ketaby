@@ -18,7 +18,7 @@ class ChangePasswordAndDeleteAccountCubit extends Cubit<ChangePasswordAndDeleteA
   UserProfileModel? userModel;
   String token = CashHelper.getData(key: 'token').toString() ?? '';
 
-  Future<void> deleteAccount({BuildContext? context ,String ? currentPassword}) async {
+  Future<void> deleteAccount({String ? currentPassword}) async {
     emit(DeleteProfileLoading());
 
     try {
@@ -31,12 +31,7 @@ class ChangePasswordAndDeleteAccountCubit extends Cubit<ChangePasswordAndDeleteA
       CashHelper.removeData(key: 'image');
       CashHelper.removeData(key: 'email');
 
-      ScaffoldMessenger.of(context!).showSnackBar(
-        SnackBar(
-          content: Text(response.data['message'].toString()),
-          backgroundColor: Colors.green,
-        ),
-      );
+      print (response.data);
 
 
       emit(DeleteProfileSuccess());
@@ -45,31 +40,34 @@ class ChangePasswordAndDeleteAccountCubit extends Cubit<ChangePasswordAndDeleteA
       emit(DeleteProfileError());
     }
   }
-  Future<void> changePassword({BuildContext? context,String? oldPassword,String? newPassword,String? confirmPassword}) async {
-    emit(ChangePasswordLoading());
-
-    try {
-      var response = await DioHelper.postData(url: 'change-password', token: token,data: {
+  Future changePassword({String? oldPassword,String? newPassword,String? confirmPassword}) async {
+    if (state is! ChangePasswordAndDeleteAccountInitial) {
+      emit(ChangePasswordLoading());
+    }    DioHelper.postData(url: 'update-password', token: token,data: {
         'current_password': oldPassword,
         'new_password': newPassword,
         'new_password_confirmation': confirmPassword,
-      });
+      }).then((value) => {
+        print(value.statusCode),
+      if (value.statusCode==200) {
+         print (value.data),
+
+      },
 
 
 
-      ScaffoldMessenger.of(context!).showSnackBar(
-        SnackBar(
-          content: Text(response.data['message'].toString()),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (state is! ChangePasswordAndDeleteAccountInitial) {
+        emit(ChangePasswordSuccess())
+      }
+      }).catchError((error) {
+        print(error.toString());
+        if (state is! ChangePasswordAndDeleteAccountInitial) {
+          emit(ChangePasswordError());
+        }      });
 
-      emit(ChangePasswordSuccess());
-    } catch (error) {
-      print(error.toString());
-      emit(ChangePasswordError());
-    }
-    close();
+
+
+
   }
 
 

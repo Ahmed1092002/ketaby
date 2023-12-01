@@ -89,7 +89,13 @@ class ProfileBody extends StatelessWidget {
                           ),
                         IconButton(
                           onPressed: () {
-                            cubit.logout(context);
+                            cubit.logout();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Logout'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
                             navigateToScreenAndExit(context, LoginScrean());
                           },
                           icon: Icon(

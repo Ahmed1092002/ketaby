@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ketaby/Views/books_body.dart';
+import 'package:ketaby/Views/wish_list_body.dart';
 import 'package:ketaby/blocs/ChangePasswordAndDeleteAccount/change_password_and_delete_account_cubit.dart';
 import 'package:ketaby/widgets/main_screan_drawer.dart';
 import 'package:ketaby/Views/profile_body.dart';
@@ -40,7 +41,7 @@ class _MainScreanState extends State<MainScrean> {
 
       ),
       BooksBody(),
-      Text('Books'),
+      WishListBody(),
       CartBody(),
       ProfileBody(),
 
@@ -72,7 +73,7 @@ class _MainScreanState extends State<MainScrean> {
           create: (context) =>
               HomePageCubit(),
         ),
-        BlocProvider(create: (context) => ProductCubit()),
+        BlocProvider(create: (context) => ProductCubit()..getProductData()..getWisListData()),
         BlocProvider(create: (context) => CartCubit()),
         BlocProvider(create: (context) =>
         ProfileCubit()

@@ -17,74 +17,100 @@ class OrderHistoryScrean extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = OrderHistoryCubit.get(context);
-    return  FutureBuilder(
-        builder:(context,snapshot) {
-          if (snapshot.hasData) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                        'Order History- total orders ${cubit.orderHistoryModel!.data!.orders!.length}'),
-                    centerTitle: true,
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                  ),
-                  body: ListView.separated(
-                    itemCount: cubit.orderHistoryModel!.data!.orders!.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        color: Colors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Order Number:${cubit.orderHistoryModel!.data!.orders![index].orderCode}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Order Status:${cubit.orderHistoryModel!.data!.orders![index].status}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Total Price:${cubit.orderHistoryModel!.data!.orders![index].total}L.E',
-                                  style: TextStyle(fontSize: 20),
-                                )
-                              ],
-                            ),
-                            Text(
-                              'Order Date\n${cubit.orderHistoryModel!.data!.orders![index].orderDate}',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ),
+          // if (cubit.noOrderHistoryModel != null) {
+          //   return Scaffold(
+          //     appBar: AppBar(
+          //       title: Text('Order History'),
+          //       centerTitle: true,
+          //       backgroundColor: Colors.white,
+          //       elevation: 0,
+          //     ),
+          //     body: Center(
+          //       child: Text(
+          //         'No Orders To Show',
+          //         style: TextStyle(fontSize: 20),
+          //       ),
+          //     ),
+          //   );
+          // }
+
+          if (cubit.orderHistoryModel == null) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Order History'),
+                centerTitle: true,
+                backgroundColor: Colors.white,
+                elevation: 0,
+              ),
+              body: Center(
+                child: Text('non'),
+              ),
+            );  }
+
+
+          // if (cubit.orderHistoryModel!.data==null) {
+          //   return Scaffold(
+          //     appBar: AppBar(
+          //       title: Text('Order History'),
+          //       centerTitle: true,
+          //       backgroundColor: Colors.white,
+          //       elevation: 0,
+          //     ),
+          //     body: Center(
+          //       child: Text(
+          //         'No Orders To Show',
+          //         style: TextStyle(fontSize: 20),
+          //       ),
+          //     ),
+          //   );
+          // }
+
+
+    return  Scaffold(
+      appBar: AppBar(
+        title: Text(
+            'Order History- total orders ${cubit.orderHistoryModel!.data!.orders!.length}'),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: ListView.separated(
+        itemCount: cubit.orderHistoryModel!.data!.orders!.length,
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order Number:${cubit.orderHistoryModel!.data!.orders![index].orderCode}',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    separatorBuilder: (context, index) => Divider(),
-                  ),
-                );
-              }
-          else {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                        'Order History'),
-                    centerTitle: true,
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                  ),
-                  body: Center(
-                    child: Text('No Orders Yet'),
-                  ),
-                );
-              }
-            },
-        future:cubit.getOrderData() ,
-
-
-      );
+                    Text(
+                      'Order Status:${cubit.orderHistoryModel!.data!.orders![index].status}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      'Total Price:${cubit.orderHistoryModel!.data!.orders![index].total}L.E',
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+                Text(
+                  'Order Date\n${cubit.orderHistoryModel!.data!.orders![index].orderDate}',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+          ),
+        ),
+        separatorBuilder: (context, index) => Divider(),
+      ),
+    );
 
         },
       ),
