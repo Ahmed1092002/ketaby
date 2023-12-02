@@ -29,7 +29,14 @@ class ProfileBody extends StatelessWidget {
 
         child: BlocConsumer<ProfileCubit, ProfileState>(
   listener: (context, state) {
-
+    if (state is UpdateProfileError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('error on upload image try again on another image'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   },
   builder: (context, state) {
     var cubit = ProfileCubit.get(context);
@@ -191,7 +198,11 @@ class ProfileBody extends StatelessWidget {
                     onPressed: () async {
 
                       await cubit.updateProfileData();
-                      await cubit.getProfileData();
+
+
+
+
+
                       cubit.imageFile = null;
                       cubit.pickedFilename = null;
 

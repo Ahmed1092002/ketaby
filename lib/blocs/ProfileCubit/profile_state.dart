@@ -20,5 +20,7 @@ class UpdateProfileLoading extends ProfileState {}
 
 class UpdateProfileSuccess extends ProfileState {}
 
-class UpdateProfileError extends ProfileState {}
+class UpdateProfileError extends ProfileState {
+
+}
 
