@@ -32,7 +32,7 @@ class ProfileBody extends StatelessWidget {
     if (state is UpdateProfileError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('error on upload image try again on another image'),
+          content: Text('error on upload image try again on another image or check if the date is correct'),
           backgroundColor: Colors.red,
         ),
       );
