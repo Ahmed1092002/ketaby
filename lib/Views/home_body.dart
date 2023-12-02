@@ -125,11 +125,9 @@ class _HomeBodyState extends State<HomeBody> {
                         Spacer(),
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: image == null
+                          backgroundImage: image == null || image == 'null'
                               ? AssetImage('assets/images/WhatsAppImage.jpg')
                               : NetworkImage(image!) as ImageProvider,
-                          child: image ==null || image == 'null' ? CircularProgressIndicator() :
-                          Image.network(image !) ,
                         ),
                       ],
                     ),
