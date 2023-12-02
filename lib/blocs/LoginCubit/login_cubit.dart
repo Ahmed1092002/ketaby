@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ketaby/Views/main_screan.dart';
+import 'package:ketaby/utils/navigator.dart';
 import 'package:meta/meta.dart';
 
 import '../../model/UserModel.dart';
@@ -20,10 +22,11 @@ class LoginCubit extends Cubit<LoginState> {
   var storage = const FlutterSecureStorage();
 
 
-  login (
+   login  (
   {
     required String email,
     required String password,
+
   }
       )async {
     var data ={
@@ -34,23 +37,30 @@ class LoginCubit extends Cubit<LoginState> {
     DioHelper.postData(url: "login", data: data).
     then((value) async {
       print(value.data);
+      if (value.statusCode == 422) {
+        emit(LoginError(value.data));
 
-      userModel = UserModel.fromJson(value.data);
-      print (userModel!.data!.token);
-      // await storage.write(key: 'token', value: userModel!.data!.token);
-      CashHelper.saveData(
-          key: 'token', value:userModel!.data!.token);
-
-      emit(LoginSuccess(userModel!));
+      }else {
+        userModel = UserModel.fromJson(value.data);
+        print(userModel!.data!.token);
+        // await storage.write(key: 'token', value: userModel!.data!.token);
+        CashHelper.saveData(
+            key: 'token', value: userModel!.data!.token);
+        CashHelper.saveData(
+            key: 'image', value: userModel!.data!.user!.image!);
+        CashHelper.saveData(
+            key: 'email', value: userModel!.data!.user!.email!);
+        CashHelper.saveData(
+            key: 'name', value: userModel!.data!.user!.name!);
+        emit(LoginSuccess(userModel!));
+      }
     }).catchError((error) {
-      if (error.response!.statusCode == 422) {
-        print(error.response!.data);
-        emit(LoginError(error.response!.data['message']));
-      } else {
+
         print(error.toString());
         emit(LoginError(error.toString()));
-      }
+
     });
+
   }
 
 

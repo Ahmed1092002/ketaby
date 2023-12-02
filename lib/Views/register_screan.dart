@@ -23,31 +23,7 @@ class RegisterScrean extends StatelessWidget {
   child: BlocConsumer<RegisterCubit, RegisterState>(
   listener: (context, state) {
 
-if (state is RegisterSuccess) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(state.userModel.message!),
-    ),
-  );
-  CashHelper.saveData(
-      key: 'image', value: state.userModel.data!.user!.image!);
-  CashHelper.saveData(
-      key: 'email', value: state.userModel.data!.user!.email!);
-  CashHelper.saveData(
-      key: 'name', value: state.userModel.data!.user!.name!)
-      .then((value) {
-    navigateToScreenAndExit(context, MainScrean(
 
-    ));
-  });
-}
-if (state is RegisterError) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(state.error.toString()),
-    ),
-  );
-}
   },
   builder: (context, state) {
     var cubit = RegisterCubit.get(context);
@@ -140,18 +116,44 @@ SizedBox(
                         icon: Icons.lock,
                         controller: cubit.confirmPasswordController,
                       ),
+                      if (state is RegisterLoading)
+                        CircularProgressIndicator()
+                      else
                       CustomButton(
                         buttonName: 'Register',
-                        onPressed: () {
+                        onPressed: () async {
 if (formKey.currentState!.validate()) {
   formKey.currentState!.save();
 
-  cubit.register(
+  await cubit.register(
+
     name: cubit.nameController.text,
     email: cubit.emailController.text,
     password: cubit.passwordController.text,
     confirmPassword: cubit.confirmPasswordController.text,
   );
+
+  Future.delayed(Duration(seconds: 1), () {
+    if ( cubit.userModel==null){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error invalid data '),
+        ),
+      );
+
+    }
+    else if (cubit.userModel!=null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Register Success'),
+        ),
+      );
+      navigateToScreenAndExit(context, MainScrean(  ) );
+
+    }
+  });
+
+
 
 
 }else{

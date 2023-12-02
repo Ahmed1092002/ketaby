@@ -23,33 +23,9 @@ class LoginScrean extends StatelessWidget {
   child: Scaffold(
         body: BlocConsumer<LoginCubit, LoginState>(
   listener: (context, state) {
-    if (state is LoginSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.userModel.message!),
-        ),
-      );
-      CashHelper.saveData(
-          key: 'image', value: state.userModel.data!.user!.image!);
-      CashHelper.saveData(
-          key: 'email', value: state.userModel.data!.user!.email!);
-      CashHelper.saveData(
-          key: 'name', value: state.userModel.data!.user!.name!)
-          .then((value) {
-        navigateToScreenAndExit(context, MainScrean(
-
-        ));
-      });
 
 
-    }
-    if (state is LoginError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.error.toString()),
-        ),
-      );
-    }
+
   },
   builder: (context, state) {
     var cubit = LoginCubit.get(context);
@@ -83,7 +59,7 @@ class LoginScrean extends StatelessWidget {
 
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width/10,
+                              width: MediaQuery.of(context).size.width/15,
                             ),
 
                             Text(
@@ -128,18 +104,45 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             icon: Icons.lock,
                             controller: cubit.passwordController,
                           ),
+                          if (state is LoginLoading)
+                            LinearProgressIndicator()
+                          else
                           CustomButton(
                             buttonName: 'Login',
-                            onPressed: () {
+                            onPressed: () async {
                               if (formKey.currentState!.validate()) {
                                 formKey.currentState!.save();
-                                cubit.login(
-                                    email: cubit.emailController.text,
-                                    password: cubit.passwordController.text,
-                                    );
+                              await  cubit.login(
+
+                                  email: cubit.emailController.text,
+                                  password: cubit.passwordController.text,
+                                );
+
+                              Future.delayed(Duration(seconds: 1), () {
+                                if ( cubit.userModel==null){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error invalid email or password'),
+                                    ),
+                                  );
+
+                                }
+                              else   if (cubit.userModel!=null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Login Success'),
+                                    ),
+                                  );
+                                  navigateToScreenAndExit(context, MainScrean(  ) );
+
+                                }
+                              });
                               } else {
-                                autovalidateMode =
-                                    AutovalidateMode.onUserInteraction;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error'),
+                                  ),
+                                );
                               }
 
                             },

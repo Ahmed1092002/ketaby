@@ -40,10 +40,10 @@ class ChangePasswordAndDeleteAccountCubit extends Cubit<ChangePasswordAndDeleteA
       emit(DeleteProfileError());
     }
   }
-  Future changePassword({String? oldPassword,String? newPassword,String? confirmPassword}) async {
-    if (state is! ChangePasswordAndDeleteAccountInitial) {
+   changePassword({String? oldPassword,String? newPassword,String? confirmPassword}) async {
+
       emit(ChangePasswordLoading());
-    }    DioHelper.postData(url: 'update-password', token: token,data: {
+        DioHelper.postData(url: 'update-password', token: token,data: {
         'current_password': oldPassword,
         'new_password': newPassword,
         'new_password_confirmation': confirmPassword,
@@ -51,19 +51,26 @@ class ChangePasswordAndDeleteAccountCubit extends Cubit<ChangePasswordAndDeleteA
         print(value.statusCode),
       if (value.statusCode==200) {
          print (value.data),
-
-      },
-
-
-
-      if (state is! ChangePasswordAndDeleteAccountInitial) {
+        userModel = UserProfileModel.fromJson(value.data),
         emit(ChangePasswordSuccess())
-      }
+
+      } else {
+         print (value.data),
+         userModel = UserProfileModel.fromJson(value.data),
+         emit(ChangePasswordError())
+
+       }
+
+
+
+
+
+
       }).catchError((error) {
         print(error.toString());
-        if (state is! ChangePasswordAndDeleteAccountInitial) {
+
           emit(ChangePasswordError());
-        }      });
+            });
 
 
 

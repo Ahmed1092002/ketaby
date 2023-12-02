@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketaby/Views/login_screan.dart';
+import 'package:ketaby/Views/main_screan.dart';
 import 'package:ketaby/Views/order_history_screan.dart';
 import 'package:ketaby/blocs/ChangePasswordAndDeleteAccount/change_password_and_delete_account_cubit.dart';
 import 'package:ketaby/src/app_root.dart';
@@ -43,29 +44,34 @@ TextEditingController passwordOfDeleteAccountController = TextEditingController(
 
         child: ListView(
           children: [
-            DrawerHeader(
-              curve: Curves.easeIn,
-              decoration: BoxDecoration(
-                color: mainColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                 CircleAvatar(
-                   radius: 40,
-                   backgroundImage: NetworkImage(image!),
-                 ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: DrawerHeader(
+                duration: Duration(seconds: 1),
+                curve: Curves.easeIn,
+                decoration: BoxDecoration(
+                  color: mainColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                   CircleAvatar(
+                     radius: 60,
+                     backgroundImage: NetworkImage(image!),
+                   ),
 
-                  Text(
-                    name!,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
-                  ),
+                    Text(
+                      name!,
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,color: Colors.white),
+                    ),
 
-                  Text(
-                    email!,
-                    style: TextStyle(fontSize: 17, color: Colors.white),
-                  ),
-                ],
+                    Text(
+                      email!,
+                      style: TextStyle(fontSize: 17, color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
             ),
             ListTile(
@@ -95,23 +101,7 @@ TextEditingController passwordOfDeleteAccountController = TextEditingController(
   create: (context) => ChangePasswordAndDeleteAccountCubit(),
   child: BlocConsumer<ChangePasswordAndDeleteAccountCubit, ChangePasswordAndDeleteAccountState>(
     listener: (context, state) {
-if (state is ChangePasswordSuccess) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('Password Changed Successfully'),
-      backgroundColor: Colors.green,
-    ),
-  );
-  if (state is ChangePasswordError) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error'),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
 
-}
     },
     builder: (context, state) {
       var cubit = ChangePasswordAndDeleteAccountCubit.get(context);
@@ -119,6 +109,7 @@ if (state is ChangePasswordSuccess) {
                       titleTextStyle: TextStyle(color: mainColor,fontSize: 20),
                       scrollable: true,
                       surfaceTintColor: mainColor,
+
                       backgroundColor: Colors.white,
                       title: Text('Change Password',style: TextStyle(color: mainColor),),
                       content: Column(
@@ -146,6 +137,12 @@ if (state is ChangePasswordSuccess) {
                             controller: confirmPasswordController,
                           ),
 
+
+
+
+
+
+
                         ],
                       ),
                       actions: [
@@ -157,17 +154,49 @@ if (state is ChangePasswordSuccess) {
                         ),
                         TextButton(
                           onPressed: () async {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Password Changed Successfully'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
+
+
                           await   cubit.changePassword(
                                 oldPassword: oldPasswordController.text,
                                 newPassword: newPasswordController.text,
                                 confirmPassword: confirmPasswordController.text);
+                          Future.delayed(Duration(seconds: 1), () {
+                            if ( cubit.userModel==null){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error the old password is incorrect'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+
+
+                            }
+
+
+                            else if ( newPasswordController.text == confirmPasswordController.text) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Password Changed Successfully'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error Password Not Match'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+
+
+                            }
+
+                          });
+
+
+
 
 
 

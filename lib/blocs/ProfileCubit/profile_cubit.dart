@@ -26,12 +26,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   File? imageFile;
   var imagePicker = ImagePicker();
   var pickedFilename;
+  int statuesCode = 0;
   Future<void> pickProfileImage() async {
    final  pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      pickedFilename = pickedFile.path.split('/').last;
+      // pickedFilename = pickedFile.path.split('/').last;
+      // print (pickedFilename);
+      pickedFilename = pickedFile.name;
       imageFile = File(pickedFile.path);
-      print (imageFile!.path);
 
       emit(ProfileImagePickedSuccessState());
 
@@ -46,16 +48,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     DioHelper.getData(url: 'profile', token: token)
         .then((value) => {
           print(value.statusCode),
-
-          userModel=UserProfileModel.fromJson(value.data),
-          emit(GetProfileSuccess())
+    if (value.statusCode==401||value.statusCode==403) {
+        CashHelper.removeData(key: 'token'),
+    CashHelper.removeData(key: 'name'),
+    CashHelper.removeData(key: 'image'),
+    CashHelper.removeData(key: 'email'),
+    emit(GetProfileError())
+  }else
+    { userModel=UserProfileModel.fromJson(value.data),
+    emit(GetProfileSuccess())}
     }).catchError((error){
-      print(error.toString());
-      if (error.toString().contains('401')||error.toString().contains('403')) {
-        CashHelper.removeData(key: 'token');
-        print('401');
-      }
-      print (token);
+
 
       print(error.toString());
       emit(GetProfileError());
@@ -104,7 +107,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(UpdateProfileError());
     });
   }
-  Future<void> logout() async {
+  Future logout() async {
     if (state is! LogoutLoadingState) {
       emit(LogoutLoadingState());
     }
@@ -118,6 +121,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       CashHelper.removeData(key: 'email');
 
 print (response.data);
+print (response.statusCode);
+statuesCode = response.statusCode!;
 
       if (state is! LogoutLoadingState) {
         emit(LogoutSuccessState());

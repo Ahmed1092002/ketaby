@@ -208,7 +208,16 @@ getCityIndex(String index){
                           lapel: 'order now',
                           totalPrice: cubit.checkOutModel!.data!.total.toString(),
                           onPressed: () async {
-                            cubit.placeOrder(governorate_id: cityindex.toString());
+                          await   cubit.placeOrder(governorate_id: cityindex.toString());
+                          if (cubit.placeOrderSucessModel==null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('error'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+
+                          }
 
                           },
                         ),

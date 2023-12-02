@@ -54,12 +54,14 @@ class ProfileBody extends StatelessWidget {
     return Stack(
           alignment: Alignment.center,
         clipBehavior: Clip.hardEdge,
-          fit: StackFit.loose,
+
 
           children: [
             Positioned(
 
-                bottom: 525,
+                bottom: MediaQuery.of(context).size.height*0.68,
+
+
 
 
                 child: CircleAvatar(
@@ -75,7 +77,7 @@ class ProfileBody extends StatelessWidget {
 
                         children: [
                           SizedBox(
-                            width: 170,
+                            width: 190,
                           ),
                           Text(
                             'Ketaby',
@@ -109,11 +111,13 @@ class ProfileBody extends StatelessWidget {
                   ),
                 ),
                 ),
-            Positioned(child: CircleAvatar(
-              radius: 100,
+            Positioned(
+
+              child: CircleAvatar(
+              radius: 90,
               backgroundColor: Colors.white,
               child: CircleAvatar(
-                radius: 90,
+                radius: 80,
                 backgroundImage:cubit.imageFile != null ?
                 FileImage(cubit.imageFile!)
                   : NetworkImage(cubit.userModel!.data!.image!) as ImageProvider,
@@ -131,8 +135,8 @@ class ProfileBody extends StatelessWidget {
                 )
               ),
             ),
-              bottom: 410,
-              left: 100,
+              bottom: MediaQuery.of(context).size.height*0.55,
+              left: MediaQuery.of(context).size.width*0.3,
             ),
 
 
