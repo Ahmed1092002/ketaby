@@ -1,22 +1,36 @@
-# ketaby
 
-A new Flutter project.
+# Ketapy E-commerce
+> An e-commerce platform for buying programming-related books.
 
-## Getting Started
+## Overview
+Ketapy is a user-friendly e-commerce app designed for buying programming-related books. It features browsing categories, adding items to the cart, and placing orders through an easy checkout process.
 
-This project is a starting point for a Flutter application.
+## Features
+- Browse programming books.
+- Add to cart functionality.
+- User login and profile management.
+- Order checkout.
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used
+- **Flutter** for UI development.
+- **Dio** for handling API requests.
+- **Cubit** for state management.
+- **Shared Preferences** for local storage.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Ahmed1092002/ketaby.git
+   cd ketaby
+# Install dependencies:
+  ```bash
+flutter pub get
+```
+# Run the app:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-
+```
+flutter run
+```
 
 https://github.com/Ahmed1092002/ketaby/assets/112315071/518a2235-5832-4398-9def-f1d0c937bc54
 
