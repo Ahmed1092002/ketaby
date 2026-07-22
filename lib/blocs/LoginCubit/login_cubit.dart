@@ -42,8 +42,9 @@ class LoginCubit extends Cubit<LoginState> {
 
       }else {
         userModel = UserModel.fromJson(value.data);
+
         print(userModel!.data!.token);
-        // await storage.write(key: 'token', value: userModel!.data!.token);
+        //await storage.write(key: 'token', value: userModel!.data!.token);
         CashHelper.saveData(
             key: 'token', value: userModel!.data!.token);
         CashHelper.saveData(
